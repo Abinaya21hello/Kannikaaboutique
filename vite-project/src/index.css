@@ -1,0 +1,31 @@
+/* =========================
+   GLOBAL DESIGN SYSTEM
+========================= */
+
+:root {
+  --primary: #F9E900;
+  --secondary: #68BA44;
+  --accent: #9154A1;
+  --dark: #2E2E2E;
+  --light: #FFFDF4;
+}
+
+/* Reset + Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--light);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings */
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', serif;
+  color: var(--accent);
+}

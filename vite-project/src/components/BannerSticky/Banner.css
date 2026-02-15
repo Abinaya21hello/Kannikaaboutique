@@ -1,0 +1,14 @@
+.banner-layout {
+  position: sticky;
+  top: 50;   /* 🔥 THIS is what you need */
+  height: 500px;
+  width: 100%;
+  z-index: 10;
+}
+
+.banner-layout img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

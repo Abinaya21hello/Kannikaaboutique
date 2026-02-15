@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cinzel:wght@500;600&display=swap');
+
+:root {
+  --yellow: #F2C300;
+  --green: #6FB64A;
+  --logo-pink: #E91E63;
+  --logo-purple: #8E5AA9;
+  --bg: #FFFEF6;
+  --text-dark: #2B2B2B;
+}
+
+/* ===== TOP BAR ===== */
+.top-bar {
+  background: linear-gradient(90deg, var(--yellow), var(--green));
+  color: #2B2B2B;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-align: center;
+  padding: 10px;
+  position: relative;
+  z-index: 1001;
+  animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.nav-container {
+  max-width: 1440px;
+  margin: auto;
+  padding: 22px 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* ===== LOGO ===== */
+.logo {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.logo img {
+  height: 56px;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover img {
+  transform: scale(1.05);
+}
+
+/* ===== MENU ===== */
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 28px;
+  flex: 1;
+}
+
+.nav-links a {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--logo-pink);
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 6px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Elegant underline */
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--green), var(--logo-pink));
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-links a:hover {
+  color: var(--text-dark);
+}
+
+/* ===== ICONS ===== */
+.nav-icons {
+  display: flex;
+  gap: 18px;
+  font-size: 18px;
+  color: var(--logo-purple);
+}
+
+.nav-icons svg {
+  cursor: pointer;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.nav-icons svg:hover {
+  transform: translateY(-3px);
+  color: var(--logo-pink);
+}
+
+/* ===== HAMBURGER ===== */
+.menu-toggle {
+  display: none;
+  font-size: 24px;
+  color: var(--logo-purple);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.menu-toggle:hover {
+  transform: scale(1.1);
+  color: var(--logo-pink);
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .nav-links {
+    gap: 20px;
+  }
+  
+  .nav-links a {
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+}
+
+@media (max-width: 900px) {
+  .nav-links {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 999;
+    pointer-events: none;
+  }
+
+  .nav-links.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .nav-links a {
+    font-size: 16px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+  }
+
+  .nav-links.active a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .nav-links a:nth-child(1) { transition-delay: 0.1s; }
+  .nav-links a:nth-child(2) { transition-delay: 0.2s; }
+  .nav-links a:nth-child(3) { transition-delay: 0.3s; }
+  .nav-links a:nth-child(4) { transition-delay: 0.4s; }
+  .nav-links a:nth-child(5) { transition-delay: 0.5s; }
+  .nav-links a:nth-child(6) { transition-delay: 0.6s; }
+  .nav-links a:nth-child(7) { transition-delay: 0.7s; }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav-container {
+    padding: 15px 20px;
+  }
+
+  .logo img {
+    height: 45px;
+  }
+
+  .nav-icons {
+    gap: 12px;
+    font-size: 16px;
+  }
+
+  .top-bar {
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 8px;
+  }
+}
