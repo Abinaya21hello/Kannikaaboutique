@@ -1,5 +1,4 @@
 import multer from "multer"
-import path from "path"
 import fs from "fs"
 
 // Ensure folder exists
@@ -9,7 +8,7 @@ const ensureDir = (dir) => {
   }
 }
 
-// Carousel Storage
+//////////////////// CAROUSEL ////////////////////
 const carouselStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     const dir = "uploads/carousel"
@@ -21,7 +20,7 @@ const carouselStorage = multer.diskStorage({
   }
 })
 
-// Product Storage
+//////////////////// PRODUCT ////////////////////
 const productStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     const dir = "uploads/products"
@@ -33,5 +32,18 @@ const productStorage = multer.diskStorage({
   }
 })
 
+//////////////////// CATEGORY ////////////////////
+const categoryStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const dir = "uploads/categories"
+    ensureDir(dir)
+    cb(null, dir)
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname)
+  }
+})
+
 export const uploadCarousel = multer({ storage: carouselStorage })
 export const uploadProduct = multer({ storage: productStorage })
+export const uploadCategory = multer({ storage: categoryStorage }) // ✅ new

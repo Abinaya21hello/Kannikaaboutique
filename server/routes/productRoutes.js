@@ -5,24 +5,29 @@ import {
   getProductById,
   updateProduct,
   deleteProduct,
-  getFeaturedProducts
+  getFeaturedProducts,
+  getProductsByCategorySlug
 } from "../controllers/productController.js"
+
 import { uploadProduct } from "../middleware/uploadMiddleware.js"
-
-
-import { protect, adminOnly } from "../middleware/authMiddleware.js"
+import { protect } from "../middleware/authMiddleware.js"
 
 const router = express.Router()
 
-// Public
+// PUBLIC
 router.get("/", getProducts)
 router.get("/featured", getFeaturedProducts)
+
+// 🔥 IMPORTANT: CATEGORY ROUTE FIRST
+router.get("/category/:slug", getProductsByCategorySlug)
+
+// SINGLE PRODUCT
 router.get("/:id", getProductById)
 
+// CREATE PRODUCT
 router.post(
   "/",
   protect,
-  // adminOnly,
   uploadProduct.fields([
     { name: "frontImage", maxCount: 1 },
     { name: "hoverImage", maxCount: 1 },
@@ -31,7 +36,8 @@ router.post(
   createProduct
 )
 
-router.put("/:id", protect, adminOnly, updateProduct)
-router.delete("/:id", protect, adminOnly, deleteProduct)
+// UPDATE DELETE
+router.put("/:id", protect,  updateProduct)
+router.delete("/:id", protect, deleteProduct)
 
 export default router

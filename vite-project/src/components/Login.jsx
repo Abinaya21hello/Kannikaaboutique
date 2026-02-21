@@ -110,7 +110,7 @@ function Login() {
     setApiError('')
     
     try {
-      const response = await axios.post('http://localhorst:5000/api/auth/login', {
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
         email: formData.email.trim(),
         password: formData.password
       }, {

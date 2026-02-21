@@ -10,39 +10,52 @@ import BannerLayout from "./components/BannerSticky/Banner";
 import Footer from "./components/Footer/Footer";
 import UnderDevelopment from "./components/UnderDevelopment";
 
-// 👇 change here
-const UNDER_DEV = true;  // true = under development page show
+import Categories from "./components/Categories/Categories";
+import CategoryProducts from "./components/Categories/CategoryProducts";
+
+const UNDER_DEV = false;
 
 function App() {
 
-  // if under development ON
   if (UNDER_DEV) {
     return <UnderDevelopment />;
   }
 
   return (
     <Router>
-      <div>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={
-            <>
-              <Hero />
-              <NewArrivals />
-              <BannerLayout />
-            </>
-          } />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/sarees" element={<div>Sarees Page - Coming Soon</div>} />
-          <Route path="/fabric" element={<div>Fabric Page - Coming Soon</div>} />
-          <Route path="/salwars" element={<div>Unstitched Salwar Page - Coming Soon</div>} />
-          <Route path="/dupattas" element={<div>Dupatta Page - Coming Soon</div>} />
-          <Route path="/women" element={<div>Women's Collections Page - Coming Soon</div>} />
-        </Routes>
-        <Footer />
-      </div>
+      <Navbar />
+
+      <Routes>
+
+        {/* HOME */}
+        <Route path="/" element={
+          <>
+            <Hero />
+            <NewArrivals />
+            <BannerLayout />
+            <Categories /> {/* 🔥 show category in home */}
+          </>
+        } />
+
+        {/* CATEGORY PAGE */}
+        <Route path="/categories" element={<Categories />} />
+
+        {/* CATEGORY PRODUCTS */}
+        <Route path="/category/:slug" element={<CategoryProducts />} />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/about" element={<About />} />
+
+        <Route path="/sarees" element={<div>Sarees Page</div>} />
+        <Route path="/fabric" element={<div>Fabric Page</div>} />
+        <Route path="/salwars" element={<div>Salwar Page</div>} />
+        <Route path="/dupattas" element={<div>Dupatta Page</div>} />
+        <Route path="/women" element={<div>Women Collection</div>} />
+
+      </Routes>
+
+      <Footer />
     </Router>
   );
 }

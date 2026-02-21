@@ -1,57 +1,49 @@
 import Cart from "../models/Cart.js"
 
-// Add to cart
-export const addToCart = async (req, res) => {
-  const { productId, quantity } = req.body
+export const addToCart = async(req,res)=>{
+  try{
 
-  const existing = await Cart.findOne({
-    user: req.user._id,
-    product: productId
-  })
+    const userId = req.user._id   // 🔥 from token
+    const {productId, quantity, size} = req.body
 
-  if (existing) {
-    existing.quantity += quantity
-    await existing.save()
-    return res.json(existing)
+    const exist = await Cart.findOne({
+      user:userId,
+      product:productId
+    })
+
+    if(exist){
+      exist.quantity += quantity || 1
+      await exist.save()
+      return res.json({message:"Cart updated"})
+    }
+
+    await Cart.create({
+      user:userId,
+      product:productId,
+      quantity: quantity || 1,
+      size
+    })
+
+    res.json({message:"Added to cart"})
+
+  }catch(err){
+    res.status(500).json({message:err.message})
   }
-
-  const cartItem = await Cart.create({
-    user: req.user._id,
-    product: productId,
-    quantity
-  })
-
-  res.status(201).json(cartItem)
 }
 
-// Get cart
-export const getCart = async (req, res) => {
-  const items = await Cart.find({
-    user: req.user._id
-  }).populate("product")
 
-  res.json(items)
-}
 
-// Update quantity
-export const updateCartQuantity = async (req, res) => {
-  const { quantity } = req.body
+export const getCart = async(req,res)=>{
+  try{
 
-  const item = await Cart.findOneAndUpdate(
-    { _id: req.params.id, user: req.user._id },
-    { quantity },
-    { new: true }
-  )
+    const userId = req.user._id
 
-  res.json(item)
-}
+    const cart = await Cart.find({user:userId})
+      .populate("product")
 
-// Remove from cart
-export const removeFromCart = async (req, res) => {
-  await Cart.findOneAndDelete({
-    _id: req.params.id,
-    user: req.user._id
-  })
+    res.json(cart)
 
-  res.json({ message: "Removed from cart" })
+  }catch(err){
+    res.status(500).json({message:err.message})
+  }
 }

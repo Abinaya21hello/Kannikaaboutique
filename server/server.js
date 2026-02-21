@@ -14,6 +14,8 @@ import cartRoutes from "./routes/cartRoutes.js"
 import productRoutes from "./routes/productRoutes.js"
 import contactRoutes from "./routes/contactRoutes.js"
 import adminRoutes from "./routes/adminRouter.js"
+import categoryRoutes from "./routes/categoryRoutes.js"
+
 
 
 dotenv.config()
@@ -36,6 +38,8 @@ app.use("/api/cart", cartRoutes)
 app.use("/api/products", productRoutes)
 app.use("/api/contact", contactRoutes)
 app.use("/api/admin", adminRoutes) // Admin auth routes
+app.use("/api/categories", categoryRoutes) // Category routes
+
 
 
 

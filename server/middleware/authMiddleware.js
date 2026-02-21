@@ -2,24 +2,27 @@ import jwt from "jsonwebtoken"
 import User from "../models/User.js"
 
 export const protect = async (req, res, next) => {
-  const token = req.cookies.token
-
-  if (!token) return res.status(401).json({ message: "Not authorized" })
-
   try {
+
+    const token = req.cookies.token   // 🍪 from cookie
+
+    if (!token) {
+      return res.status(401).json({ message: "Not logged in" })
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    req.user = await User.findById(decoded.id).select("-password")
-    next()
-  } catch (error) {
-    res.status(401).json({ message: "Token failed" })
-  }
-}
 
+    const user = await User.findById(decoded.id).select("-password")
 
-export const adminOnly = (req, res, next) => {
-  if (req.user && req.user.role === "admin") {
+    if (!user) {
+      return res.status(401).json({ message: "User not found" })
+    }
+
+    req.user = user   // 🔥 attach user
+
     next()
-  } else {
-    res.status(403).json({ message: "Admin access only" })
+
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" })
   }
 }

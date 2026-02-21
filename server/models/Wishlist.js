@@ -1,11 +1,18 @@
 import mongoose from "mongoose"
 
-const wishlistSchema = new mongoose.Schema(
-  {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
+const wishlistSchema = new mongoose.Schema({
+  user:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User",
+    required:true
   },
-  { timestamps: true }
-)
 
-export default mongoose.model("Wishlist", wishlistSchema)
+  product:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Product",
+    required:true
+  }
+
+},{timestamps:true})
+
+export default mongoose.model("Wishlist",wishlistSchema)

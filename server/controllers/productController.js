@@ -1,4 +1,5 @@
 import Product from "../models/Product.js"
+import Category from "../models/categoryModel.js"
 
 export const createProduct = async (req, res) => {
   try {
@@ -53,12 +54,14 @@ export const getProducts = async (req, res) => {
     }
 
     const products = await Product.find(filter)
+      .populate("category", "name slug image") // 🔥 important
 
     res.json(products)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
 }
+
 
 
 // ✅ GET SINGLE PRODUCT
@@ -113,5 +116,27 @@ export const getFeaturedProducts = async (req, res) => {
     res.json(products)
   } catch (error) {
     res.status(500).json({ message: error.message })
+  }
+}
+
+
+
+export const getProductsByCategorySlug = async(req,res)=>{
+  try{
+    const {slug} = req.params
+
+    const category = await Category.findOne({slug})
+    if(!category){
+      return res.status(404).json({message:"Category not found"})
+    }
+
+    const products = await Product.find({
+      category: category._id
+    })
+
+    res.json(products)
+
+  }catch(err){
+    res.status(500).json({message:err.message})
   }
 }

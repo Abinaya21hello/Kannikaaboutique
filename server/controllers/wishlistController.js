@@ -1,40 +1,45 @@
 import Wishlist from "../models/Wishlist.js"
 
-// Add
-export const addToWishlist = async (req, res) => {
-  const { productId } = req.body
+export const addWishlist = async(req,res)=>{
+  try{
 
-  const exists = await Wishlist.findOne({
-    user: req.user._id,
-    product: productId
-  })
+    const userId = req.user._id
+    const {productId} = req.body
 
-  if (exists)
-    return res.status(400).json({ message: "Already in wishlist" })
+    const exist = await Wishlist.findOne({
+      user:userId,
+      product:productId
+    })
 
-  const item = await Wishlist.create({
-    user: req.user._id,
-    product: productId
-  })
+    if(exist){
+      return res.json({message:"Already in wishlist"})
+    }
 
-  res.status(201).json(item)
+    await Wishlist.create({
+      user:userId,
+      product:productId
+    })
+
+    res.json({message:"Added to wishlist"})
+
+  }catch(err){
+    res.status(500).json({message:err.message})
+  }
 }
 
-// Get
-export const getWishlist = async (req, res) => {
-  const items = await Wishlist.find({
-    user: req.user._id
-  }).populate("product")
 
-  res.json(items)
-}
 
-// Remove
-export const removeFromWishlist = async (req, res) => {
-  await Wishlist.findOneAndDelete({
-    _id: req.params.id,
-    user: req.user._id
-  })
+export const getWishlist = async(req,res)=>{
+  try{
 
-  res.json({ message: "Removed from wishlist" })
+    const userId = req.user._id
+
+    const items = await Wishlist.find({user:userId})
+      .populate("product")
+
+    res.json(items)
+
+  }catch(err){
+    res.status(500).json({message:err.message})
+  }
 }
