@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const productSchema = new mongoose.Schema(
+const productslugSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
     description: { type: String, required: true },
@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema(
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
+      required: true
     },
 
     subCategory: {
@@ -20,9 +21,9 @@ const productSchema = new mongoose.Schema(
         "Saree",
         "Kurta",
         "Lehenga",
+        "Mens Wear",
         "Gown",
-        "Accessories",
-        "Couples Wear"
+        "Accessories"
       ],
       required: true
     },
@@ -45,4 +46,4 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Product", productSchema);
+export default mongoose.model("ProductSlug", productslugSchema);
