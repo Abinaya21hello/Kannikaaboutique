@@ -88,44 +88,39 @@ function NewArrivals() {
   }
 
   // Add to cart function
-  const addToCart = async (id, qty = 1, size = "") => {
-    try {
-      const product = products.find(p => p._id === id)
-      if (!product) return
+// Inside addToCart function, after successful addition:
+const addToCart = async (id, qty = 1, size = "") => {
+  try {
+    const product = products.find(p => p._id === id)
+    if (!product) return
 
-      // Check if size is required but not selected
-      if (product.sizes && product.sizes.length > 0 && !size) {
-        showNotificationMessage("Please select a size", "error")
-        return
-      }
+    if (product.sizes && product.sizes.length > 0 && !size) {
+      showNotificationMessage("Please select size", "error")
+      return
+    }
 
-      const response = await axios.post(
-        `${API_BASE_URL}/api/cart`,
-        { 
-          productId: id, 
-          quantity: qty, 
-          size: size || (product.sizes?.[0] || "")
-        }
-      )
-      
-      if (response.data) {
-        showNotificationMessage("✅ Added to cart successfully!")
-        fetchUserCart() // Refresh cart data
-      }
-    } catch (err) {
-      console.error("Cart error:", err)
-      if (err.response?.status === 401) {
-        showNotificationMessage("🔒 Please login to add items to cart", "error")
-        // Redirect to login page after 2 seconds
-        setTimeout(() => {
-          window.location.href = "/login"
-        }, 2000)
-      } else {
-        showNotificationMessage("❌ Failed to add to cart", "error")
-      }
+    const response = await axios.post(
+      `${API_BASE_URL}/api/cart`,
+      {
+        productId: id,
+        quantity: qty,
+        size: size || (product.sizes?.[0] || "")
+      },
+      { withCredentials: true }   // 🔥 IMPORTANT
+    )
+
+    showNotificationMessage("Added to cart")
+    fetchUserCart()
+
+  } catch (err) {
+    console.log(err)
+
+    if (err.response?.status === 401) {
+      showNotificationMessage("Login first", "error")
+      setTimeout(()=> navigate("/login"),1500)
     }
   }
-
+}
   // Add to wishlist function
   const addToWishlist = async (id) => {
     try {

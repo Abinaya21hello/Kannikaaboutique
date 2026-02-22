@@ -91,91 +91,60 @@ function Login() {
     setTouched(prev => ({ ...prev, [field]: true }))
   }
 
+
+
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
-    // Mark all fields as touched
-    setTouched({
-      email: true,
-      password: true
-    })
-    
-    // Validate all fields
-    const isValid = validateField()
-    if (!isValid) {
-      return
-    }
-    
-    setIsLoading(true)
-    setApiError('')
-    
-    try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+  e.preventDefault()
+
+  setTouched({
+    email: true,
+    password: true
+  })
+
+  const isValid = validateField()
+  if (!isValid) return
+
+  setIsLoading(true)
+  setApiError("")
+
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/auth/login",
+      {
         email: formData.email.trim(),
-        password: formData.password
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      
-      console.log('Login response:', response.data)
-      
-      // Store token if returned
-      if (response.data.token) {
-        if (formData.rememberMe) {
-          localStorage.setItem('token', response.data.token)
-          localStorage.setItem('user', JSON.stringify(response.data.user))
-        } else {
-          sessionStorage.setItem('token', response.data.token)
-          sessionStorage.setItem('user', JSON.stringify(response.data.user))
-        }
+        password: formData.password,
+      },
+      {
+        withCredentials: true // 🔥 IMPORTANT for cookie
       }
-      
-      // Show success message
-      alert('Login successful!')
-      
-      // Redirect to home page
-      navigate('/')
-      
-    } catch (error) {
-      console.error('Login error:', error)
-      
-      if (error.response) {
-        // Server responded with error
-        switch (error.response.status) {
-          case 400:
-            setApiError(error.response.data.message || 'Invalid request. Please check your input.')
-            break
-          case 401:
-            setApiError('Invalid email or password. Please try again.')
-            break
-          case 403:
-            setApiError('Account locked. Please contact support.')
-            break
-          case 404:
-            setApiError('User not found. Please check your email.')
-            break
-          case 429:
-            setApiError('Too many login attempts. Please try again later.')
-            break
-          case 500:
-            setApiError('Server error. Please try again later.')
-            break
-          default:
-            setApiError('Login failed. Please try again.')
-        }
-      } else if (error.request) {
-        // Request made but no response
-        setApiError('Network error. Please check your internet connection.')
-      } else {
-        // Something else happened
-        setApiError('An unexpected error occurred.')
-      }
-    } finally {
-      setIsLoading(false)
+    )
+
+    console.log("Login success:", response.data)
+
+    // ✅ cookie already stored from backend
+    // no need localStorage token
+
+    alert("Login successful 🎉")
+
+    // redirect home
+    navigate("/")
+
+    // 🔥 refresh to load cart/navbar user
+    window.location.reload()
+
+  } catch (error) {
+    console.log("Login error:", error)
+
+    if (error.response) {
+      setApiError(error.response.data.message || "Login failed")
+    } else {
+      setApiError("Server error")
     }
+  } finally {
+    setIsLoading(false)
   }
+}
+
 
   // Password strength indicator
   const getPasswordStrength = () => {
